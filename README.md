@@ -1,9 +1,11 @@
 # 🧳 AI Travel Planner — MVP (prototype)
 
-> **Status**: 🚧 *Under active development* - this is a **minimum viable product (MVP)** demonstrating AI‑powered itinerary generation.
+> **Status**: 🚧 MVP – working prototype (under active development)
 
-## 📝 Overview
-A web application that generates daily travel plans based on **budget**, **destination** and **duration**. The backend uses **Flask** and calls **Groq API** (Llama 3) to produce realistic activities and costs. The UI is built with **Bootstrap 5** and allows manual day‑by‑day editing.
+## 📖 Overview
+A web application that generates daily travel plans based on **budget**, **destination** and **duration**.  
+The backend uses **Flask** and calls **Groq API** (Llama 3) to produce realistic activities and costs.  
+The UI is built with **Bootstrap 5** and allows manual day‑by‑day editing.
 
 ## ✨ Current features (prototype)
 - ✅ AI‑generated itineraries (JSON → styled cards)
@@ -31,25 +33,27 @@ ai-travel-planner/
 
 
 ## 🚀 Running locally (for testing)
-1. Clone the repo  
+1. **Clone the repo**  
    `git clone https://github.com/YOUR_USERNAME/ai-travel-planner.git`
-2. Install dependencies  
+2. **Install dependencies**  
    `pip install -r requirements.txt`
-3. Add your **Groq API key** in a `.env` file:  
+3. **Add your Groq API key** in a `.env` file:  
    `GROQ_API_KEY=your_key_here`
-4. Run the app  
+4. **Run the app**  
    `python app.py`
-5. Open `http://127.0.0.1:8000`
+5. **Open your browser** at `http://127.0.0.1:8000`
 
 ## 📜 License
 This project is licensed under the **MIT License** – you are free to use, modify, and distribute it with attribution.
 
 ## 👨‍💻 Author
-**Hayhat Tahir** – [GitHub Profile](https://github.com/HayhatDev)
+**Hayhat Tahir** – [GitHub Profile](https://github.com/HeyhatDev)
+
+> Built collaboratively with my brother (frontend support) and friends (testing & feedback).
 
 ## 🔮 Future plans (beyond MVP)
 - Add map visualization (Leaflet / Google Maps)
 - Save & share itineraries via unique links
 - More intelligent fallback logic
 - User authentication (optional)
-- Travllers secrets and advice section
+- Travelers secrets and advice section
