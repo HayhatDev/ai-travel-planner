@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Travel Planner — Smart Itinerary Generator</title>
+    <!-- Bootstrap 5 + Icons + Font -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #f8f9ff 0%, #eef2fa 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255,255,255,0.6);
+            transition: all 0.2s ease;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(95deg, #2b3b6e, #1b2a4e);
+            border: none;
+            padding: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: 0.2s;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(95deg, #1f2e54, #121e38);
+            box-shadow: 0 12px 18px -8px rgba(0,0,0,0.2);
+        }
+        .table-custom th {
+            background-color: #eef2ff;
+            font-weight: 600;
+            color: #1f2a44;
+            border-bottom: 2px solid #cdd9ed;
+        }
+        .edit-btn {
+            background-color: #ffeed9;
+            border: 1px solid #ffe0b5;
+            color: #aa6f20;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .edit-btn:hover {
+            background-color: #ffdead;
+            border-color: #f1c38f;
+            color: #7b4a10;
+        }
+        .badge-ai {
+            background: #e9e6ff;
+            color: #4a3b8c;
+            font-size: 0.7rem;
+            padding: 6px 12px;
+            border-radius: 60px;
+            font-weight: 500;
+        }
+        footer {
+            font-size: 0.75rem;
+            color: #6c6f78;
+            text-align: center;
+            margin-top: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="glass-card p-4 p-md-5">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+            <div>
+                <h1 class="display-6 fw-semibold"><i class="bi bi-globe-asia-australia"></i> AI Travel Planner</h1>
+                <p class="text-muted mt-1">Groq · Llama 3 · smart itineraries</p>
+            </div>
+            <div class="mt-2 mt-sm-0">
+                <span class="badge-ai"><i class="bi bi-cpu"></i> AI‑powered</span>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold"><i class="bi bi-cash-stack"></i> Budget (USD)</label>
+                <input type="number" id="budget" class="form-control" placeholder="e.g., 800" value="600">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold"><i class="bi bi-calendar-week"></i> Number of days</label>
+                <input type="number" id="days" class="form-control" placeholder="e.g., 4" value="3">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold"><i class="bi bi-pin-map-fill"></i> Destination</label>
+                <input type="text" id="destination" class="form-control" placeholder="e.g., Istanbul, Paris" value="Tokyo">
+            </div>
+        </div>
+
+        <div class="d-grid mb-5">
+            <button onclick="planTrip()" class="btn btn-primary-custom btn-lg rounded-pill shadow-sm">
+                <i class="bi bi-stars"></i>  PLAN MY TRIP WITH AI
+            </button>
+        </div>
+
+        <!-- RESULT AREA (itinerary will appear here) -->
+        <div id="result" class="mt-2"></div>
+        <footer>
+            <i class="bi bi-robot"></i> AI generates realistic daily plans · Edit any day · Built with Flask + Groq
+        </footer>
+    </div>
+</div>
+
+<script>
+    async function planTrip() {
+        const budget = document.getElementById('budget').value;
+        const days = document.getElementById('days').value;
+        const destination = document.getElementById('destination').value;
+
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">✨ AI is crafting your personal itinerary...</p></div>`;
+
+        try {
+            const response = await fetch('/plan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ budget, days, destination })
+            });
+            const data = await response.json();
+            if (data.status === 'success') {
+                displayTableWithEditButtons(data.html_table);
+            } else {
+                resultDiv.innerHTML = `<div class="alert alert-danger">⚠️ ${data.message || 'Something went wrong'}</div>`;
+            }
+        } catch (err) {
+            resultDiv.innerHTML = `<div class="alert alert-danger">❌ Network error: ${err.message}</div>`;
+        }
+    }
+
+    function displayTableWithEditButtons(htmlTable) {
+        const container = document.getElementById('result');
+        container.innerHTML = htmlTable;
+
+        const table = container.querySelector('table');
+        if (!table) return;
+
+        // إضافة عمود "Actions" في الرأس إذا لم يكن موجوداً
+        let headerRow = table.querySelector('tr');
+        if (headerRow && headerRow.children.length === 3) {
+            let th = document.createElement('th');
+            th.textContent = 'Actions';
+            headerRow.appendChild(th);
+        }
+
+        const rows = table.querySelectorAll('tbody tr');
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const editCell = document.createElement('td');
+            const editBtn = document.createElement('button');
+            editBtn.innerHTML = '<i class="bi bi-pencil-square"></i> Edit';
+            editBtn.className = 'edit-btn';
+            editBtn.dataset.dayIndex = i;
+            editBtn.onclick = () => handleEdit(i);
+            editCell.appendChild(editBtn);
+            row.appendChild(editCell);
+        }
+    }
+
+    async function handleEdit(dayIndex) {
+        const newActivity = prompt("✏️ Edit activity for day " + (dayIndex+1));
+        if (!newActivity) return;
+        const newCost = prompt("💰 Update cost (USD) for day " + (dayIndex+1));
+        if (!newCost) return;
+
+        const response = await fetch('/update_day', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                day_index: dayIndex,
+                new_activity: newActivity,
+                new_cost: parseFloat(newCost)
+            })
+        });
+        const data = await response.json();
+        if (data.status === 'success') {
+            displayTableWithEditButtons(data.html_table);
+        } else {
+            alert("⚠️ Update failed: " + (data.message || "unknown error"));
+        }
+    }
+</script>
+</body>
+</html>
