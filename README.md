@@ -45,7 +45,7 @@ ai-travel-planner/
 This project is licensed under the **MIT License** – you are free to use, modify, and distribute it with attribution.
 
 ## 👨‍💻 Author
-**Hayhat Tahir** – [GitHub Profile](https://github.com/YOUR_USERNAME)
+**Hayhat Tahir** – [GitHub Profile](https://github.com/HayhatDev)
 
 ## 🔮 Future plans (beyond MVP)
 - Add map visualization (Leaflet / Google Maps)
