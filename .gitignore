@@ -1,0 +1,42 @@
+# Python cache 
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+.env
+.venv
+venv/
+ENV/
+env/
+
+# Replit-specific folders
+.pythonlibs/
+.replit
+.config/
+.local/
+.nix/
+.cache/
+
+# IDE files 
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+*.env
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Project-specific 
+__pycache__/
+instance/
